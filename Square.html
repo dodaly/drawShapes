@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<title>Rotating Square</title>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+// vertex position
+attribute vec4 vPosition;
+// uniform to pass the world coords
+uniform vec4 wc_holder;
+// Need this when you have vertex colors
+attribute vec4 vColor;
+// need this to pass color to fragment shader
+varying vec4 fColor;
+
+void main()
+{
+// if you are using vertex colors you need to assign it to fColor
+    gl_PointSize = 5.0;
+    float NDC_X = -1.0 + 2.0 * (vPosition.x - wc_holder[0]) / (wc_holder[1] - wc_holder[0]);
+	float NDC_Y = -1.0 + 2.0 * (vPosition.y - wc_holder[2]) / (wc_holder[3] - wc_holder[2]);
+    fColor = vColor;
+	gl_Position = vec4(NDC_X, NDC_Y, 0.0, 1.0);;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+// need it if you are receiving vertex colors
+varying vec4 fColor;
+
+void main()
+{
+    gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
+
+// use this if you are getting colors from vertex shader 
+gl_FragColor = fColor;
+}
+</script>
+
+<script type="text/javascript" src="Common/webgl-utils.js"></script>
+<script type="text/javascript" src="Common/initShaders.js"></script>
+<script type="text/javascript" src="Common/MV.js"></script>
+<script type="text/javascript" src="Square.js"></script>
+</head>   
+
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+<button type="button" id="findpoint">Find Point</button> <button type="button"id="drawpoint">Draw Point</button>
+<button type="button"id="drawline">Draw Line</button> <button type="button"id="drawtriangle">Draw Triangle</button>
+<p> </p>
+<p id="demo2"></p>
+<textarea id="demo" rows="3" cols="60">
+this is a bunch of letters to be a placeholder
+for the size of the text area
+</textarea>
+<form id = "theform">
+  WX min:
+  <input type="number" ID = "WX_min" name="WX_min" value="-30">
+  WY min:
+  <input type="number" ID = "WY_min" name="WY_min" value="-40">
+  <br>
+  WX max:
+  <input type="number" ID = "WX_max" name="WX_max" value="30">
+  WY max:
+  <input type="number" ID = "WY_max" name="WY_max" value="30">
+  <br><br>
+</form>
+<button type="accept" id="accept">accept</button>
+</body>
+</html>
